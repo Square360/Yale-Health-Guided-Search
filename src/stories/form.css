@@ -1,0 +1,68 @@
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/components/form/form.scss ***!
+  \**************************************************************************************************************************************************************************************************************************/
+.form .form__element--input-textfield,
+.form .form__element--input-email,
+.form .form__element--input-password,
+.form .form__element--textarea {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #4A4A4A;
+  padding: 0.5em 1.25em;
+  outline: var(--form-element-outline-width, 0) var(--form-element-outline-style, dashed) var(--form-element-outline-color, currentColor);
+  outline-offset: 4px;
+  transition: all 200ms ease-in-out;
+}
+.form .form__element--input-textfield:focus-within,
+.form .form__element--input-email:focus-within,
+.form .form__element--input-password:focus-within,
+.form .form__element--textarea:focus-within {
+  border-color: #286DC0;
+}
+[data-whatintent=keyboard] .form .form__element--input-textfield:focus-within,
+[data-whatintent=keyboard] .form .form__element--input-email:focus-within,
+[data-whatintent=keyboard] .form .form__element--input-password:focus-within,
+[data-whatintent=keyboard] .form .form__element--textarea:focus-within {
+  --form-element-outline-width: 4px;
+  --form-element-outline-color: #286DC0;
+}
+.form .form__element--input-textfield > * + *,
+.form .form__element--input-email > * + *,
+.form .form__element--input-password > * + *,
+.form .form__element--textarea > * + * {
+  margin-top: 0.25em;
+}
+.form .form__label--required::after {
+  content: "*";
+  color: #E4002B;
+  margin-left: 0.25em;
+}
+.form .form__description {
+  font-size: 0.7501875469rem;
+  margin-top: 0.5em;
+  color: inherit;
+}
+.form .form__select-wrapper {
+  position: relative;
+}
+.form .form__select-wrapper select {
+  padding-right: calc(63.984px);
+}
+.form .form__select-wrapper::after {
+  content: "";
+  background-color: currentColor;
+  -webkit-mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuMS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIyIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMzU2LjcgMjEyLjdMMjU2IDMxMy40TDE1NS4zIDIxMi43Yy02LjI1LTYuMjUtMTYuMzgtNi4yNS0yMi42MiAwcy02LjI1IDE2LjM4IDAgMjIuNjJsMTEyIDExMkMyNDcuOCAzNTAuNCAyNTEuOSAzNTIgMjU2IDM1MnM4LjE4OC0xLjU2MiAxMS4zMS00LjY4OGwxMTItMTEyYzYuMjUtNi4yNSA2LjI1LTE2LjM4IDAtMjIuNjJTMzYyLjkgMjA2LjQgMzU2LjcgMjEyLjd6TTI1NiAwQzExNC42IDAgMCAxMTQuNiAwIDI1NnMxMTQuNiAyNTYgMjU2IDI1NnMyNTYtMTE0LjYgMjU2LTI1NlMzOTcuNCAwIDI1NiAwek0yNTYgNDgwYy0xMjMuNSAwLTIyNC0xMDAuNS0yMjQtMjI0czEwMC41LTIyNCAyMjQtMjI0czIyNCAxMDAuNSAyMjQgMjI0UzM3OS41IDQ4MCAyNTYgNDgweiIvPjwvc3ZnPg==);
+          mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuMS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIyIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMzU2LjcgMjEyLjdMMjU2IDMxMy40TDE1NS4zIDIxMi43Yy02LjI1LTYuMjUtMTYuMzgtNi4yNS0yMi42MiAwcy02LjI1IDE2LjM4IDAgMjIuNjJsMTEyIDExMkMyNDcuOCAzNTAuNCAyNTEuOSAzNTIgMjU2IDM1MnM4LjE4OC0xLjU2MiAxMS4zMS00LjY4OGwxMTItMTEyYzYuMjUtNi4yNSA2LjI1LTE2LjM4IDAtMjIuNjJTMzYyLjkgMjA2LjQgMzU2LjcgMjEyLjd6TTI1NiAwQzExNC42IDAgMCAxMTQuNiAwIDI1NnMxMTQuNiAyNTYgMjU2IDI1NnMyNTYtMTE0LjYgMjU2LTI1NlMzOTcuNCAwIDI1NiAwek0yNTYgNDgwYy0xMjMuNSAwLTIyNC0xMDAuNS0yMjQtMjI0czEwMC41LTIyNCAyMjQtMjI0czIyNCAxMDAuNSAyMjQgMjI0UzM3OS41IDQ4MCAyNTYgNDgweiIvPjwvc3ZnPg==);
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  font-size: 1.333rem;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1em;
+  position: absolute;
+  pointer-events: none;
+  width: 1em;
+  height: 1em;
+}

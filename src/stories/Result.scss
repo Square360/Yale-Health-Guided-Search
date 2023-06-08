@@ -1,0 +1,43 @@
+.result_card {
+  __container {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  &--left_container {
+    display: flex;
+    flex-direction: column;
+
+  }
+  &--right_container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    & h4 {
+      font-weight: bold;
+      font-size: 18px;
+      & span {
+        color: rgb(63, 110, 187);
+      }
+    }
+    & p{
+        font-size: 14px;
+    }
+  }
+  &--title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  &--description {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  &--contact {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgb(63, 110, 187);
+  }
+}
