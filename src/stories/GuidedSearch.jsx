@@ -7,8 +7,6 @@ import './base.css';
 import './form.css';
 import parse from 'html-react-parser';
 
-import { ResultCard } from './Result';
-
 const GuidedSearch = ({ state = 'landing' }) => {
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState({});
   const [result, setResult] = useState([]);
@@ -24,7 +22,6 @@ const GuidedSearch = ({ state = 'landing' }) => {
   };
 
   const handleSubmit = (item) => {
-    console.log(':::', item);
     if (submittedSearchTerm.synonym) {
       const urls = [
         `https://yh-205-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health/${item.nid}?_format=json`,
@@ -33,7 +30,6 @@ const GuidedSearch = ({ state = 'landing' }) => {
       ];
       Promise.all(urls.map((url) => fetch(url).then((r) => r.json())))
         .then(([healthTopics, coverageTopics, departmentInfo]) => {
-          console.log(":::D", departmentInfo)
           setCommonReasons([]);
           setHealthTopics(healthTopics);
           setCoverageTopics(coverageTopics);
@@ -103,13 +99,11 @@ const GuidedSearch = ({ state = 'landing' }) => {
 
     const endIndex = startIndex + searchTerm?.length || -1;
     return (
-      <span>
+      <>
         {title.substring(0, startIndex)}
-        <span className="guided-search-app__result-list-item guided-search-app__result-list-item--highlight">
-          {title.substring(startIndex, endIndex)}
-        </span>
+        <strong>{title.substring(startIndex, endIndex)}</strong>
         {title.substring(endIndex)}
-      </span>
+      </>
     );
   };
 
@@ -148,37 +142,36 @@ const GuidedSearch = ({ state = 'landing' }) => {
                     })}
                   />
                 </div>
-                <ul
-                  className="guided-search-app__result-list"
-                  {...getMenuProps()}
-                >
-                  {isOpen &&
-                    result?.map((item, index) => (
+                {isOpen && (
+                  <ul
+                    className="guided-search-app__result-list"
+                    {...getMenuProps()}
+                  >
+                    {result?.map((item, index) => (
                       <li
                         {...getItemProps({
                           key: item.value,
                           index,
                           item,
                           className: 'guided-search-app__result-list-item',
-                          style: {
-                            backgroundColor:
-                              highlightedIndex === index ? '##63AAFF' : 'white',
-                            fontWeight:
-                              selectedItem === item ? 'bold' : 'normal',
-                          },
                         })}
                       >
-                        <p>{highlightTitle(item.title, inputValue)}</p>
-                        {highlightTitle(item.synonym, inputValue)}
+                        <div className="guided-search-app__result-title">
+                          {highlightTitle(item.title, inputValue)}
+                        </div>
+                        <div className="guided-search-app__result-synonym">
+                          {highlightTitle(item.synonym, inputValue)}
+                        </div>
                       </li>
                     ))}
-                </ul>
+                  </ul>
+                )}
               </div>
             )}
           </Downshift>
         </form>
-        {renderSubmittedSearchTerm()}
         {renderNoResults()}
+        {renderSubmittedSearchTerm()}
         {renderCommonReasons()}
         {renderHealthTopics()}
         {renderCoverageTopics()}
@@ -191,11 +184,11 @@ const GuidedSearch = ({ state = 'landing' }) => {
 
     if (!departmentInfo.length && submittedSearchTerm.title) {
       data = (
-        <p className="guided-search--top-heading">
-        We didn't find anything for "{submittedSearchTerm.title}", Perhaps one of the <br />{' '}
-        links below can help.{' '}
-      </p>
-      )
+        <p className="guided-search-app__no-results">
+          We didn't find anything for "{submittedSearchTerm.title}", Perhaps one
+          of the links below can help.
+        </p>
+      );
     }
     return data;
   };
@@ -206,30 +199,87 @@ const GuidedSearch = ({ state = 'landing' }) => {
       return null;
     }
     data = (
-      <div>
-        <div>
-          {submittedSearchTerm.title}
-          {submittedSearchTerm.cta_link && (
-            <a href={submittedSearchTerm.cta_link}>
-              {submittedSearchTerm.cta_link_title}{' '}
-            </a>
-          )}
-          {!submittedSearchTerm.cta_link &&
-            parse(submittedSearchTerm.cta_text || '')}
+      <div className="guided-search-app__search-results">
+        <div className="guided-search-app__departments">
+          {departmentInfo.map((department) => {
+            return (
+              <article className="department">
+                <div className="department__heading">
+                  <a href={department.url}>{department.title}</a>
+                </div>
+                {department.phone && (
+                  <div className="department__phone">
+                    {parse(department.phone)}
+                  </div>
+                )}
+                {department.restrictions && (
+                  <div className="department__restrictions">
+                    {parse(department.restrictions)}
+                  </div>
+                )}
+
+                {departmentInfo.length === 1 && (
+                  <>
+                    {department.hours && (
+                      <div className="department__hours">
+                        {parse(department.hours)}
+                      </div>
+                    )}
+                    {department.location && (
+                      <div className="department__location">
+                        {parse(department.location)}
+                      </div>
+                    )}
+                  </>
+                )}
+              </article>
+            );
+          })}
         </div>
-        {departmentInfo.map((department) => {
-          return (
-            <div>
-              <span>{department.title}</span>
-              {parse(department.restrictions || '')}
-              {parse(department.phone || '')}
-              {parse(department.hours || '')}
-              {parse(department.location || '')}
-            </div>
-          );
-        })}
+        {renderCTA()}
       </div>
     );
+
+    return data;
+  };
+
+  const renderCTA = () => {
+    let data = null;
+
+    if (!submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
+      data = (
+        <div className="guided-search-app__cta">
+          <div className="guided-search-app__cta-text">
+            {parse(submittedSearchTerm.cta_text || '')}
+          </div>
+        </div>
+      );
+    } else if (submittedSearchTerm.cta_link && !submittedSearchTerm.cta_text) {
+      data = (
+        <div className="guided-search-app__cta">
+          <div className="guided-search-app__cta-link">
+            {
+              <a href={submittedSearchTerm.cta_link}>
+                {submittedSearchTerm.cta_link_title}
+              </a>
+            }
+          </div>
+        </div>
+      );
+    } else if (submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
+      data = (
+        <div className="guided-search-app__cta">
+          <div className="guided-search-app__cta-link">
+            <a href={submittedSearchTerm.cta_link}>
+              {submittedSearchTerm.cta_link_title}
+            </a>
+          </div>
+          <div className="guided-search-app__cta-text">
+            {parse(submittedSearchTerm.cta_text || '')}
+          </div>
+        </div>
+      );
+    }
 
     return data;
   };
@@ -243,7 +293,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
       !submittedSearchTerm.title
     ) {
       data = (
-        <div className="guided-search--top-heading">
+        <div className="guided-search-app__common-reasons">
           <span>Common reasons</span>
           {commonReasons.map((reason) => {
             return (
@@ -266,15 +316,20 @@ const GuidedSearch = ({ state = 'landing' }) => {
 
     if (healthTopics.length) {
       data = (
-        <div className="guided-search--top-heading">
-          <span>Health Topics</span>
-          {healthTopics?.map((topic) => {
-            return (
-              <div key={topic.nid}>
-                <a href={topic.url}>{topic.title} </a>
-              </div>
-            );
-          })}
+        <div className="guided-search-app__topics guided-search-app__topics--health">
+          Health Topics
+          <ul className="guided-search-app__topic-list">
+            {healthTopics?.map((topic) => {
+              return (
+                <li
+                  className="guided-search-app__topic-list-item"
+                  key={topic.nid}
+                >
+                  <a href={topic.url}>{topic.title} </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       );
     }
@@ -287,17 +342,20 @@ const GuidedSearch = ({ state = 'landing' }) => {
 
     if (coverageTopics.length) {
       data = (
-        <div className="guided-search--top-heading">
-          <span>Coverage Topics</span>
-          {coverageTopics?.map((topic) => {
-            return (
-              <div key={topic.nid}>
-                <span className="guided-search--topic">
+        <div className="guided-search-app__topics guided-search-app__topics--coverage">
+          Coverage Topics
+          <ul className="guided-search-app__topic-list">
+            {coverageTopics?.map((topic) => {
+              return (
+                <li
+                  className="guided-search-app__topic-list-item"
+                  key={topic.nid}
+                >
                   <a href={topic.url}>{topic.title} </a>
-                </span>
-              </div>
-            );
-          })}
+                </li>
+              );
+            })}
+          </ul>
         </div>
       );
     }
