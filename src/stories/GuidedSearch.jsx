@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from './Button';
 import Downshift from 'downshift';
-import './GuidedSearch.scss';
-import './base.css';
-import './form.css';
+// import './GuidedSearch.scss';
+// import './base.css';
+// import './form.css';
 import parse from 'html-react-parser';
 
 const GuidedSearch = ({ state = 'landing' }) => {
