@@ -109,7 +109,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
 
   const renderLanding = () => {
     return (
-      <div className="guided-search-app__container">
+      <div className="guided-search-app">
         <form className="form">
           <Downshift
             onChange={(item) => handleSubmit(item)}
@@ -200,42 +200,44 @@ const GuidedSearch = ({ state = 'landing' }) => {
     }
     data = (
       <div className="guided-search-app__search-results">
-        <div className="guided-search-app__departments">
-          {departmentInfo.map((department) => {
-            return (
-              <article className="department">
-                <div className="department__heading">
-                  <a href={department.url}>{department.title}</a>
-                </div>
-                {department.phone && (
-                  <div className="department__phone">
-                    {parse(department.phone)}
+        {departmentInfo.length && (
+          <div className="guided-search-app__departments">
+            {departmentInfo.map((department) => {
+              return (
+                <article className="department">
+                  <div className="department__heading">
+                    <a href={department.url}>{department.title}</a>
                   </div>
-                )}
-                {department.restrictions && (
-                  <div className="department__restrictions">
-                    {parse(department.restrictions)}
-                  </div>
-                )}
+                  {department.phone && (
+                    <div className="department__phone">
+                      {parse(department.phone)}
+                    </div>
+                  )}
+                  {department.restrictions && (
+                    <div className="department__restrictions">
+                      {parse(department.restrictions)}
+                    </div>
+                  )}
 
-                {departmentInfo.length === 1 && (
-                  <>
-                    {department.hours && (
-                      <div className="department__hours">
-                        {parse(department.hours)}
-                      </div>
-                    )}
-                    {department.location && (
-                      <div className="department__location">
-                        {parse(department.location)}
-                      </div>
-                    )}
-                  </>
-                )}
-              </article>
-            );
-          })}
-        </div>
+                  {departmentInfo.length === 1 && (
+                    <>
+                      {department.hours && (
+                        <div className="department__hours">
+                          {parse(department.hours)}
+                        </div>
+                      )}
+                      {department.location && (
+                        <div className="department__location">
+                          {parse(department.location)}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        )}
         {renderCTA()}
       </div>
     );
@@ -246,7 +248,20 @@ const GuidedSearch = ({ state = 'landing' }) => {
   const renderCTA = () => {
     let data = null;
 
-    if (!submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
+    if (submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
+      data = (
+        <div className="guided-search-app__cta">
+          <div className="guided-search-app__cta-link">
+            <a href={submittedSearchTerm.cta_link}>
+              {submittedSearchTerm.cta_link_title}
+            </a>
+          </div>
+          <div className="guided-search-app__cta-text">
+            {parse(submittedSearchTerm.cta_text || '')}
+          </div>
+        </div>
+      );
+    } else if (!submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
       data = (
         <div className="guided-search-app__cta">
           <div className="guided-search-app__cta-text">
@@ -263,19 +278,6 @@ const GuidedSearch = ({ state = 'landing' }) => {
                 {submittedSearchTerm.cta_link_title}
               </a>
             }
-          </div>
-        </div>
-      );
-    } else if (submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
-      data = (
-        <div className="guided-search-app__cta">
-          <div className="guided-search-app__cta-link">
-            <a href={submittedSearchTerm.cta_link}>
-              {submittedSearchTerm.cta_link_title}
-            </a>
-          </div>
-          <div className="guided-search-app__cta-text">
-            {parse(submittedSearchTerm.cta_text || '')}
           </div>
         </div>
       );
