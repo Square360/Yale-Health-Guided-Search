@@ -200,7 +200,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
     }
     data = (
       <div className="guided-search-app__search-results">
-        {departmentInfo.length && (
+        {departmentInfo.length > 0 && (
           <div className="guided-search-app__departments">
             {departmentInfo.map((department) => {
               return (
@@ -251,13 +251,13 @@ const GuidedSearch = ({ state = 'landing' }) => {
     if (submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
       data = (
         <div className="guided-search-app__cta">
+           <div className="guided-search-app__cta-text">
+            {parse(submittedSearchTerm.cta_text || '')}
+          </div>
           <div className="guided-search-app__cta-link">
             <a href={submittedSearchTerm.cta_link}>
               {submittedSearchTerm.cta_link_title}
             </a>
-          </div>
-          <div className="guided-search-app__cta-text">
-            {parse(submittedSearchTerm.cta_text || '')}
           </div>
         </div>
       );
@@ -296,16 +296,19 @@ const GuidedSearch = ({ state = 'landing' }) => {
     ) {
       data = (
         <div className="guided-search-app__common-reasons">
-          <span>Common reasons</span>
-          {commonReasons.map((reason) => {
-            return (
-              <div key={reason.nid}>
-                <span className="guided-search--topic">
+          Common reasons
+          <ul className="guided-search-app__common-reasons-list">
+            {commonReasons.map((reason) => {
+              return (
+                <li
+                  className="guided-search-app__common-reasons-list-item"
+                  key={reason.nid}
+                >
                   <a href={reason.url}>{reason.title} </a>
-                </span>
-              </div>
-            );
-          })}
+                </li>
+              );
+            })}
+          </ul>
         </div>
       );
     }
