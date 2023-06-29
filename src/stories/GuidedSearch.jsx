@@ -36,7 +36,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
   };
 
   const handleSubmit = (item) => {
-    if (submittedSearchTerm.nid) {
+    if (item.nid) {
       const urls = [
         `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health/${item.nid}?_format=json`,
         `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/coverage/${item.nid}?_format=json`,
@@ -214,9 +214,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
 
   const renderSubmittedSearchTerm = () => {
     let data = null;
-    if (!submittedSearchTerm.synonym) {
-      return null;
-    }
+
     data = (
       <div className="guided-search-app__search-results">
         {departmentInfo.length > 0 && (
