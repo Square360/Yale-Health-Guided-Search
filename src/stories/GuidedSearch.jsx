@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from './Button';
 import Downshift from 'downshift';
@@ -6,6 +6,7 @@ import Downshift from 'downshift';
 // import './base.css';
 // import './form.css';
 import parse from 'html-react-parser';
+import { DebounceInput } from 'react-debounce-input';
 
 const GuidedSearch = ({ state = 'landing' }) => {
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState({});
@@ -16,17 +17,30 @@ const GuidedSearch = ({ state = 'landing' }) => {
   const [commonReasons, setCommonReasons] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef();
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
+  const handleTest = () => {
+    setIsEditing(true);
+    inputRef.current.focus();
+  };
+
   const handleSubmit = (item) => {
-    if (submittedSearchTerm.synonym) {
+    if (submittedSearchTerm.nid) {
       const urls = [
-        `https://yh-205-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health/${item.nid}?_format=json`,
-        `https://yh-205-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/coverage/${item.nid}?_format=json`,
-        `https://yh-205-yalehealth-yale-edu.pantheonsite.io/guided-search/department/${item.nid}?_format=json`,
+        `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health/${item.nid}?_format=json`,
+        `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/coverage/${item.nid}?_format=json`,
+        `https://live-yalehealth-yale-edu.pantheonsite.io/guided-search/department/${item.nid}?_format=json`,
       ];
       Promise.all(urls.map((url) => fetch(url).then((r) => r.json())))
         .then(([healthTopics, coverageTopics, departmentInfo]) => {
@@ -45,7 +59,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `https://yh-205-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health?_format=json`
+        `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health?_format=json`
       );
       const newData = await response.json();
 
@@ -58,7 +72,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `https://yh-205-yalehealth-yale-edu.pantheonsite.io/api/yh-solr-gs-typeahead/${searchTerm}?_format=json`
+        `https://live-yalehealth-yale-edu.pantheonsite.io/api/yh-solr-gs-typeahead/${searchTerm}?_format=json`
       );
       const newData = await response.json();
 
@@ -131,14 +145,19 @@ const GuidedSearch = ({ state = 'landing' }) => {
                   className="form__element form__element--input-textfield"
                   {...getRootProps({}, { suppressRefError: true })}
                 >
-                  <label className="form__label form__label--search">
+                  <label
+                    className="form__label form__label--search"
+                    onClick={handleTest}
+                  >
                     Department, Speciality or Condition
                   </label>
-                  <input
+                  <DebounceInput
                     {...getInputProps({
-                      onChange: handleChange,
                       type: 'text',
                       className: 'form__input form__input--textfield',
+                      ref: inputRef,
+                      onChange: handleChange,
+                      debounceTimeout: 300,
                     })}
                   />
                 </div>
@@ -149,18 +168,18 @@ const GuidedSearch = ({ state = 'landing' }) => {
                   >
                     {result?.map((item, index) => (
                       <li
+                        key={index}
                         {...getItemProps({
-                          key: item.value,
                           index,
                           item,
                           className: 'guided-search-app__result-list-item',
                         })}
                       >
-                        <div className="guided-search-app__result-title">
-                          {highlightTitle(item.title, inputValue)}
-                        </div>
                         <div className="guided-search-app__result-synonym">
                           {highlightTitle(item.synonym, inputValue)}
+                        </div>
+                        <div className="guided-search-app__result-title">
+                          {highlightTitle(item.title, inputValue)}
                         </div>
                       </li>
                     ))}
@@ -202,9 +221,9 @@ const GuidedSearch = ({ state = 'landing' }) => {
       <div className="guided-search-app__search-results">
         {departmentInfo.length > 0 && (
           <div className="guided-search-app__departments">
-            {departmentInfo.map((department) => {
+            {departmentInfo.map((department, index) => {
               return (
-                <article className="department">
+                <article className="department" key={index}>
                   <div className="department__heading">
                     <a href={department.url}>{department.title}</a>
                   </div>
@@ -251,7 +270,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
     if (submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
       data = (
         <div className="guided-search-app__cta">
-           <div className="guided-search-app__cta-text">
+          <div className="guided-search-app__cta-text">
             {parse(submittedSearchTerm.cta_text || '')}
           </div>
           <div className="guided-search-app__cta-link">
