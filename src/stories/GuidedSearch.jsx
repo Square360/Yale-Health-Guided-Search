@@ -140,7 +140,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
               selectedItem,
               getRootProps,
             }) => (
-              <div key={highlightedIndex}>
+              <div>
                 <div
                   className="form__element form__element--input-textfield"
                   {...getRootProps({}, { suppressRefError: true })}
@@ -155,7 +155,7 @@ const GuidedSearch = ({ state = 'landing' }) => {
                     {...getInputProps({
                       type: 'text',
                       className: 'form__input form__input--textfield',
-                      ref: inputRef,
+                      inputRef: inputRef,
                       onChange: handleChange,
                       debounceTimeout: 300,
                     })}
@@ -172,6 +172,8 @@ const GuidedSearch = ({ state = 'landing' }) => {
                         {...getItemProps({
                           index,
                           item,
+                          isActive: highlightedIndex === index,
+                          isSelected: selectedItem === item,
                           className: 'guided-search-app__result-list-item',
                         })}
                       >
