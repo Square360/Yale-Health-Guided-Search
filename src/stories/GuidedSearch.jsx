@@ -8,7 +8,7 @@ import Downshift from 'downshift';
 import parse from 'html-react-parser';
 import { DebounceInput } from 'react-debounce-input';
 
-const GuidedSearch = ({ state = 'landing' }) => {
+const GuidedSearch = () => {
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState({});
   const [result, setResult] = useState([]);
   const [departmentInfo, setDepartmentInfo] = useState([]);
@@ -85,21 +85,6 @@ const GuidedSearch = ({ state = 'landing' }) => {
     }
   }, [searchTerm]);
 
-  useEffect(() => {
-    if (state == 'multipleResults') {
-      setResult([1, 2]);
-    } else if (state == 'oneResult') {
-      setResult([1]);
-    } else if (state == 'noResults') {
-      setResult([]);
-    }
-    if (state == 'landing') {
-      setSearchTerm(undefined);
-    } else {
-      setSearchTerm('Preventive Care');
-    }
-  }, [state]);
-
   const highlightTitle = (title, searchTerm) => {
     let startIndex = -1;
 
@@ -158,6 +143,8 @@ const GuidedSearch = ({ state = 'landing' }) => {
                       inputRef: inputRef,
                       onChange: handleChange,
                       debounceTimeout: 300,
+                      onBlur: handleChange,
+                      value: searchTerm,
                     })}
                   />
                 </div>
