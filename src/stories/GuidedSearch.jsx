@@ -54,6 +54,7 @@ const GuidedSearch = () => {
 
     setIsOpen(false);
     setSubmittedSearchTerm(item);
+    setSearchTerm(item.synonym || item.title);
   };
 
   useEffect(() => {
@@ -212,7 +213,7 @@ const GuidedSearch = () => {
               return (
                 <article className="department" key={index}>
                   <div className="department__heading">
-                    <a href={department.url}>{department.title}</a>
+                    <a href={department.url}>{parse(department.title)}</a>
                   </div>
                   {department.phone && (
                     <div className="department__phone">
@@ -262,7 +263,7 @@ const GuidedSearch = () => {
           </div>
           <div className="guided-search-app__cta-link">
             <a href={submittedSearchTerm.cta_link}>
-              {submittedSearchTerm.cta_link_title}
+              {parse(submittedSearchTerm.cta_link_title)}
             </a>
           </div>
         </div>
@@ -281,7 +282,7 @@ const GuidedSearch = () => {
           <div className="guided-search-app__cta-link">
             {
               <a href={submittedSearchTerm.cta_link}>
-                {submittedSearchTerm.cta_link_title}
+                {parse(submittedSearchTerm.cta_link_title)}
               </a>
             }
           </div>
@@ -310,7 +311,7 @@ const GuidedSearch = () => {
                   className="guided-search-app__common-reasons-list-item"
                   key={reason.nid}
                 >
-                  <a href={reason.url}>{reason.title} </a>
+                  <a href={reason.url}>{parse(reason.title)} </a>
                 </li>
               );
             })}
@@ -336,7 +337,7 @@ const GuidedSearch = () => {
                   className="guided-search-app__topic-list-item"
                   key={topic.nid}
                 >
-                  <a href={topic.url}>{topic.title} </a>
+                  <a href={topic.url}>{parse(topic.title)} </a>
                 </li>
               );
             })}
@@ -362,7 +363,7 @@ const GuidedSearch = () => {
                   className="guided-search-app__topic-list-item"
                   key={topic.nid}
                 >
-                  <a href={topic.url}>{topic.title} </a>
+                  <a href={topic.url}>{parse(topic.title)} </a>
                 </li>
               );
             })}
