@@ -71,12 +71,21 @@ const GuidedSearch = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `https://live-yalehealth-yale-edu.pantheonsite.io/api/yh-solr-gs-typeahead/${searchTerm}?_format=json`
-      );
-      const newData = await response.json();
 
-      setResult(newData);
+      try {
+        const response = await fetch(
+          `https://live-yalehealth-yale-edu.pantheonsite.io/api/yh-solr-gs-typeahead/${encodeURIComponent(searchTerm)}?_format=json`
+        );
+        const newData = await response.json();
+
+      } catch (error) {
+      }
+      
+      if (response?.ok) {
+        setResult(newData);
+      } else {
+        setResult([])
+      }
     };
 
     if (searchTerm) {
