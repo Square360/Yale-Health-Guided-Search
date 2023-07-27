@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from './Button';
 import Downshift from 'downshift';
 // import './GuidedSearch.scss';
 // import './base.css';
@@ -54,7 +53,7 @@ const GuidedSearch = () => {
 
     setIsOpen(false);
     setSubmittedSearchTerm(item);
-    setSearchTerm(item.synonym || item.title);
+    setSearchTerm(item.title || item.synonym);
   };
 
   useEffect(() => {
@@ -114,6 +113,7 @@ const GuidedSearch = () => {
           <Downshift
             onChange={(item) => handleSubmit(item)}
             itemToString={(item) => (item ? item.title : '')}
+            defaultHighlightedIndex={0}
           >
             {({
               getInputProps,
@@ -135,7 +135,7 @@ const GuidedSearch = () => {
                     className="form__label form__label--search"
                     onClick={handleTest}
                   >
-                    Department, Speciality or Condition
+                    Department, Specialty or Condition
                   </label>
                   <DebounceInput
                     {...getInputProps({
