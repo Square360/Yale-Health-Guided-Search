@@ -37,9 +37,9 @@ const GuidedSearch = () => {
   const handleSubmit = (item) => {
     if (item.nid) {
       const urls = [
-        `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health/${item.nid}?_format=json`,
-        `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/coverage/${item.nid}?_format=json`,
-        `https://live-yalehealth-yale-edu.pantheonsite.io/guided-search/department/${item.nid}?_format=json`,
+        `${import.meta.env.VITE_GS_TOPICS_ENDPOINT}/coverage/${item.nid}?_format=json`,
+        `${import.meta.env.VITE_GS_TOPICS_ENDPOINT}/health/${item.nid}?_format=json`,
+        `${import.meta.env.VITE_GS_DEPARTMENT_ENDPOINT}/${item.nid}?_format=json`,
       ];
       Promise.all(urls.map((url) => fetch(url).then((r) => r.json())))
         .then(([healthTopics, coverageTopics, departmentInfo]) => {
@@ -59,7 +59,7 @@ const GuidedSearch = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `https://live-yalehealth-yale-edu.pantheonsite.io/guidedsearch/topics/health?_format=json`
+        `${import.meta.env.VITE_GS_TOPICS_ENDPOINT}/health?_format=json`,
       );
       const newData = await response.json();
 
@@ -71,21 +71,14 @@ const GuidedSearch = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_GS_TYPEAHEAD_ENDPOINT}&`
+        + new URLSearchParams({
+          s: searchTerm,
+      }))
+      const newData = await response.json();
 
-      try {
-        const response = await fetch(
-          `https://live-yalehealth-yale-edu.pantheonsite.io/api/yh-solr-gs-typeahead/${encodeURIComponent(searchTerm)}?_format=json`
-        );
-        const newData = await response.json();
-
-      } catch (error) {
-      }
-      
-      if (response?.ok) {
-        setResult(newData);
-      } else {
-        setResult([])
-      }
+      setResult(newData);
     };
 
     if (searchTerm) {
