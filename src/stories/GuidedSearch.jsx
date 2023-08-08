@@ -217,17 +217,22 @@ const GuidedSearch = () => {
                   <div className="department__heading">
                     <a href={department.url}>{parse(department.title)}</a>
                   </div>
-                  {department.phone && (
-                    <div className="department__phone">
-                      {parse(department.phone)}
-                    </div>
-                  )}
+                 
                   {department.restrictions && (
                     <div className="department__restrictions">
                       {parse(department.restrictions)}
                     </div>
                   )}
-
+                  {department.phone && (
+                    <div className="department__phone">
+                      {parse(department.phone)}
+                    </div>
+                  )}
+                   {department.referral_needed === "true" && (
+                       <div class="department__referral-needed">
+                        Referral Needed
+                      </div>
+                  )}
                   {departmentInfo.length === 1 && (
                     <>
                       {department.hours && (
