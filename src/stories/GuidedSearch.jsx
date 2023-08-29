@@ -260,44 +260,27 @@ const GuidedSearch = () => {
   };
 
   const renderCTA = () => {
-    let data = null;
-
-    if (submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
-      data = (
-        <div className="guided-search-app__cta">
+    if (!submittedSearchTerm.cta_text && (!submittedSearchTerm.cta_link || !submittedSearchTerm.cta_link_title)) {
+      return null;
+    }
+      
+    return (
+      <div className="guided-search-app__cta">
+        { submittedSearchTerm.cta_text &&
           <div className="guided-search-app__cta-text">
-            {parse(submittedSearchTerm.cta_text || '')}
+            {parse(submittedSearchTerm.cta_text)}
           </div>
+        }
+        
+        { (submittedSearchTerm.cta_link && submittedSearchTerm.cta_link_title) &&
           <div className="guided-search-app__cta-link">
             <a href={submittedSearchTerm.cta_link}>
               {parse(submittedSearchTerm.cta_link_title)}
             </a>
           </div>
-        </div>
-      );
-    } else if (!submittedSearchTerm.cta_link && submittedSearchTerm.cta_text) {
-      data = (
-        <div className="guided-search-app__cta">
-          <div className="guided-search-app__cta-text">
-            {parse(submittedSearchTerm.cta_text || '')}
-          </div>
-        </div>
-      );
-    } else if (submittedSearchTerm.cta_link && !submittedSearchTerm.cta_text) {
-      data = (
-        <div className="guided-search-app__cta">
-          <div className="guided-search-app__cta-link">
-            {
-              <a href={submittedSearchTerm.cta_link}>
-                {parse(submittedSearchTerm.cta_link_title)}
-              </a>
-            }
-          </div>
-        </div>
-      );
-    }
-
-    return data;
+        }
+      </div>
+    );
   };
 
   const renderCommonReasons = () => {
